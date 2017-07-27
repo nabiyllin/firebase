@@ -1,0 +1,9 @@
+name: Firebase Push Notification
+type: module
+description: 'Provides a service to send notifications via Google Firebase.'
+package: Firebase
+configure: firebase.configuration
+
+dependencies:
+  - system (>=8.3.0)
+core: '8.x'

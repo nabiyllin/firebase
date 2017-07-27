@@ -1,0 +1,4 @@
+# These are the default values of the configuration for Firebase.
+
+firebase_server_key: ''
+firebase_endpoint: 'https://fcm.googleapis.com/fcm/send'
