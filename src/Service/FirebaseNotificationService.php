@@ -56,11 +56,11 @@ class FirebaseNotificationService {
     // The Authorization is our server key, which needs to be provided
     // by the admin interface.
     // @see \Drupal\firebase\Form\ConfigurationForm.php
-    $headers = $this::buildHeader();
+    $headers = $this->buildHeader();
 
     // Build the body of our request.
     // The body is composed by an array of data.
-    if (!$body = $this::buildMessage($token, $param)) {
+    if (!$body = $this->buildMessage($token, $param)) {
       return FALSE;
     }
 
@@ -99,43 +99,13 @@ class FirebaseNotificationService {
     // Silent pushes need parameter data. So we check for $param['data'].
     // If these conditions are not met, we set a default value, just to go
     // through the push notification.
-    if (!$this::validParam($param)) {
+    if (!$this->validParam($param)) {
       return FALSE;
     }
 
-    // This is the core notification body.
-    $message = [
-      'to' => $token,
-      'priority' => $this->priority,
-    ];
-
-    // Since we validated 'title' and 'body' previously,
-    // its okay to check only title here.
-    if (!empty($param['title'])) {
-      $message['notification'] = [
-        'title' => $param['title'],
-        'body' => $param['body'],
-      ];
-    }
-
-    // If data is available, adds to notification body.
-    // Data is not displayed to app users. It is usually used to send
-    // some data to be processed by the app.
-    if (!empty($param['data'])) {
-      $message['data'] = $param['data'];
-    }
-
-    // If an icon, sound or click_action are available,
-    // add them to notification body.
-    if (!empty($param['icon'])) {
-      $message['icon'] = $param['icon'];
-    }
-    if (!empty($param['sound'])) {
-      $message['sound'] = $param['sound'];
-    }
-    if (!empty($param['click_action'])) {
-      $message['click_action'] = $param['click_action'];
-    }
+    $mandatory = $this->addMandatoryFields($token, $param);
+    $optional = $this->addOptionalFields($param);
+    $message = $mandatory + $optional;
 
     return json_encode($message);
   }
@@ -153,7 +123,7 @@ class FirebaseNotificationService {
       return TRUE;
     }
 
-    if (isset($param['data']) && $this::checkReservedKeywords($param['data'])) {
+    if (isset($param['data']) && $this->checkReservedKeywords($param['data'])) {
       return TRUE;
     }
 
@@ -188,6 +158,69 @@ class FirebaseNotificationService {
   }
 
   /**
+   * Adds mandatory fields to payload.
+   *
+   * @param array $param
+   *   Data for payload.
+   *
+   * @return array
+   *   Mandatory payload.
+   */
+  private function addMandatoryFields($token, array $param) {
+    // This is the core notification body.
+    $message['to'] = $token;
+    // Assume default priority High.
+    // If we have optional parameter, we'll replace this value.
+    $message['priority'] = $this->priority;
+
+    // Since we validated 'title' and 'body' previously,
+    // its okay to check only title here.
+    if (!empty($param['title'])) {
+      $message['notification'] = [
+        'title' => $param['title'],
+        'body' => $param['body'],
+      ];
+    }
+
+    return $message;
+  }
+
+  /**
+   * Adds optional fields to payload.
+   *
+   * @param array $param
+   *   Data for payload.
+   *
+   * @return array
+   *   Optional payload.
+   */
+  private function addOptionalFields(array $param) {
+    $message = [];
+    if (!empty($param['priority'])) {
+      $message['priority'] = $param['priority'];
+    }
+    // If data is available, adds to notification body.
+    // Data is not displayed to app users. It is usually used to send
+    // some data to be processed by the app.
+    if (!empty($param['data'])) {
+      $message['data'] = $param['data'];
+    }
+    // If an icon, sound or click_action are available,
+    // add them to notification body.
+    if (!empty($param['icon'])) {
+      $message['icon'] = $param['icon'];
+    }
+    if (!empty($param['sound'])) {
+      $message['sound'] = $param['sound'];
+    }
+    if (!empty($param['click_action'])) {
+      $message['click_action'] = $param['click_action'];
+    }
+
+    return $message;
+  }
+
+  /**
    * Sends the push notification.
    *
    * @param string $token
@@ -203,6 +236,8 @@ class FirebaseNotificationService {
    *     Icon to be displayed. If none is given, the App's icon will be used.
    *   - $param['sound']
    *     Sound to play. If none is given, the App's default will be used.
+   *   - $param['priority']
+   *     Set message priority.
    *   - $param['click_action']
    *     The action associated with a user click on the notification.
    *   - $param['data']
@@ -217,7 +252,7 @@ class FirebaseNotificationService {
       return FALSE;
     }
 
-    if (!$response = $this::sendPushNotification($token, $param)) {
+    if (!$response = $this->sendPushNotification($token, $param)) {
       return FALSE;
     }
     $errorMessage = reset(json_decode($response->getBody())->results);
@@ -233,7 +268,7 @@ class FirebaseNotificationService {
     }
     else {
       // Something went wrong and no notification was sent.
-      \Drupal::logger('Firebae')->notice('@module:  @error',
+      \Drupal::logger('Firebase')->notice('@module:  @error',
         [
           '@module' => 'Firebase Notification',
           '@error' => $errorMessage->error,
