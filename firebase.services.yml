@@ -1,3 +1,4 @@
 services:
   firebase.notification:
     class: Drupal\firebase\Service\FirebaseNotificationService
+    arguments: ["@config.factory", "@http_client", "@logger.factory"]
