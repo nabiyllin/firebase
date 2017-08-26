@@ -39,7 +39,7 @@ $fakeToken = 'e3vUiwcvkpY:APA91bEDZzKTIkaL0e-UTwiV6EGi1m5J5PrDMxejm6-d85vdwAgd';
   'data' => [
     'score' => '3x1',
     'date' => '2017-10-10',
-    'optinal' => 'Data is used to send silent pushes. Otherwise, optinal.',
+    'optional' => 'Data is used to send silent pushes. Otherwise, optional.',
   ],
   'icon' => 'optional-icon',
   'sound' => 'optional-sound',
