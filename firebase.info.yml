@@ -5,5 +5,5 @@ package: Firebase
 configure: firebase.configuration
 
 dependencies:
-  - system (>=8.3.0)
+  - drupal:system (>=8.3.0)
 core: '8.x'
