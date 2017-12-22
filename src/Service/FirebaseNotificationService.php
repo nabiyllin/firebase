@@ -301,7 +301,7 @@ class FirebaseNotificationService {
     }
 
     $responseBody = json_decode($response->getBody());
-    if ($response->getStatusCode() === 200 && $responseBody->failure === 0) {
+    if ($response->getStatusCode() === 200 && (!isset($responseBody->failure) || $responseBody->failure == 0)) {
       return TRUE;
     }
 
