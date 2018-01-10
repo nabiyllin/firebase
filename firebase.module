@@ -50,11 +50,6 @@ function firebase_form($form, &$form_state) {
     '#required' => TRUE,
   );
 
-  $param['title'] = 'This is the title';
-  $param['body'] = 'This is the body';
-  // firebase_send('cEzic6Thhg4:APA91bEc1mY5H1xq8W4zmfHiP5XqxCygIExf5qTZY5-6GeNUe-DlS-5mX2Yq-B_BdJQlgXJyhITGWHXv3EHsb_1jMSsJCMr_4aocApt6WPNnRc3KDYRr4iMqUDvzEg4pwcmqIdL-NGl9', $param);
-  firebase_send('cA91bEc1mY5H1xq8W4zmfHiP5XqxCygIExf5qTZY5-6GeNUe-DlS-5mX2Yq-B_BdJQlgXJyhITGWHXv3EHsb_1jMSsJCMr_4aocApt6WPNnRc3KDYRr4iMqUDvzEg4pwcmqIdL-NGl9', $param);
-
   return system_settings_form($form);
 }
 
