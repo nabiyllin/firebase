@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * Implements hook_requirements().
+ */
+function firebase_requirements($phase) {
+  // We use cURL in order to send push notifications.
+  // Checks if cURl is available.
+  $requirements = array();
+  $t = get_t();
+
+  if ($phase == 'install' && !in_array('curl', get_loaded_extensions())) {
+    $requirements['firebase'] = array(
+      'title' => $t('cURL'),
+      'description' => $t('Firebase needs cURL enabled.'),
+      'value' => $t('not available'),
+      'severity' => REQUIREMENT_ERROR,
+    );
+  }
+
+  return $requirements;
+}
+
+/**
+ * Implements hook_uninstall().
+ */
+function firebase_uninstall() {
+  // Remove variables
+  variable_del('firebase_server_key');
+  variable_del('firebase_endpoint');
+}

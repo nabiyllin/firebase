@@ -1,0 +1,3 @@
+name = Firebase Push Notification
+description = Provides a service to send notifications via Google Firebase.
+core = 7.x
