@@ -7,6 +7,6 @@ firebase.settings:
     server_key:
       type: string
       label: 'Firebase server key'
-    endpoint:
+    sender_id:
       type: string
-      label: 'Firebase endpoint'
+      label: 'Firebase sender ID'

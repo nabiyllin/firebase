@@ -1,4 +1,4 @@
-name: Firebase Push Notification
+name: Firebase Cloud Messaging (FCM)
 type: module
 description: 'Provides a service to send notifications via Google Firebase.'
 package: Firebase

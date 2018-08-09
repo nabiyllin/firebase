@@ -35,7 +35,6 @@ class ConfigurationForm extends ConfigFormBase {
   public function buildForm(array $form, FormStateInterface $form_state) {
     $config = $this->config('firebase.settings');
 
-    // @see https://firebase.google.com
     $form['firebase'] = [
       '#type' => 'details',
       '#title' => $this->t('Configure Firebase'),
@@ -50,11 +49,11 @@ class ConfigurationForm extends ConfigFormBase {
       '#required' => TRUE,
     ];
 
-    $form['firebase']['endpoint'] = [
-      '#type' => 'url',
-      '#title' => $this->t('Firebase endpoint'),
-      '#description' => $this->t('Google Firebase Cloud Messaging endpoint.'),
-      '#default_value' => $config->get('endpoint'),
+    $form['firebase']['sender_id'] = [
+      '#type' => 'textfield',
+      '#title' => $this->t('Sender ID'),
+      '#description' => $this->t('Required for group managing service.'),
+      '#default_value' => $config->get('sender_id'),
       '#required' => TRUE,
     ];
 
@@ -68,7 +67,7 @@ class ConfigurationForm extends ConfigFormBase {
     $config = $this->config('firebase.settings');
     $config
       ->set('server_key', $form_state->getValue('server_key'))
-      ->set('endpoint', $form_state->getValue('endpoint'))
+      ->set('sender_id', $form_state->getValue('sender_id'))
       ->save();
 
     parent::submitForm($form, $form_state);
