@@ -191,7 +191,7 @@ class FirebaseMessageService extends FirebaseServiceBase {
    *   Notification options.
    */
   public function setNotification(array $notification) {
-    if (!empty($notification['title']) && !empty($notification['body'])) {
+    if (!empty($notification['title'])) {
       $this->body['notification'] = $notification;
     }
   }
